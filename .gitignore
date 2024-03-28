@@ -1,0 +1,21 @@
+# Environment
+.env
+.venv
+
+# Cache
+.ruff_cache
+*.pyc
+**/__pycache__/
+local_cache/
+
+# IDE
+.vscode/
+
+# Logs
+*.log
+
+# Env
+.env
+
+# Prototypes
+radugui.py
