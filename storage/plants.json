@@ -1,0 +1,138 @@
+[
+    {
+        "_meta": [
+            "low_air_humidity",
+            "low_air_temperature",
+            "low_soil_humidity",
+            "low_soil_ph",
+            "low_light_level"
+        ],
+        "id": 1,
+        "name": "Eddie",
+        "scientific_name": "Haworthia fasciata",
+        "personality": "polite, helpful, always bored",
+        "actual_sensor": {
+            "air_humidity": 28.7,
+            "air_temperature": 17.2,
+            "soil_humidity": 13.9,
+            "soil_ph": 5.5,
+            "light_level": 384
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 30.0,
+            "air_temperature": 18.0,
+            "soil_humidity": 20.0,
+            "soil_ph": 6.0,
+            "light_level": 500
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 50.0,
+            "air_temperature": 25.0,
+            "soil_humidity": 40.0,
+            "soil_ph": 7.0,
+            "light_level": 2000
+        }
+    },
+    {
+        "_meta": [
+            "good_air_humidity",
+            "good_air_temperature",
+            "good_soil_humidity",
+            "good_soil_ph",
+            "good_light_level"
+        ],
+        "id": 2,
+        "name": "Iduna",
+        "scientific_name": "Malus domestica",
+        "personality": "caring, green-thumb, expert in norse mythology",
+        "actual_sensor": {
+            "air_humidity": 60.0,
+            "air_temperature": 18.0,
+            "soil_humidity": 70.0,
+            "soil_ph": 6.8,
+            "light_level": 4000
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 40.0,
+            "air_temperature": 15.0,
+            "soil_humidity": 60.0,
+            "soil_ph": 6.2,
+            "light_level": 3000
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 80.0,
+            "air_temperature": 25.0,
+            "soil_humidity": 80.0,
+            "soil_ph": 7.2,
+            "light_level": 6000
+        }
+    },
+    {
+        "_meta": [
+            "high_air_humidity",
+            "high_air_temperature",
+            "high_soil_humidity",
+            "high_soil_ph",
+            "high_light_level"
+        ],
+        "id": 3,
+        "name": "Violet",
+        "scientific_name": "Saintpaulia ionantha",
+        "personality": "polite and always curious",
+        "actual_sensor": {
+            "air_humidity": 91.1,
+            "air_temperature": 28.6,
+            "soil_humidity": 93.5,
+            "soil_ph": 6.8,
+            "light_level": 1884
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 60.0,
+            "air_temperature": 18.0,
+            "soil_humidity": 70.0,
+            "soil_ph": 5.5,
+            "light_level": 500
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 80.0,
+            "air_temperature": 22.0,
+            "soil_humidity": 90.0,
+            "soil_ph": 6.5,
+            "light_level": 1000
+        }
+    },
+    {
+        "_meta": [
+            "good_air_humidity",
+            "low_air_temperature",
+            "low_soil_humidity",
+            "high_soil_ph",
+            "good_light_level"
+        ],
+        "id": 4,
+        "name": "Tilla",
+        "scientific_name": "Tillandsia cyanea",
+        "personality": "hopeless-romantic with a broken heart",
+        "actual_sensor": {
+            "air_humidity": 62.6,
+            "air_temperature": 18.7,
+            "soil_humidity": 33.2,
+            "soil_ph": 6.2,
+            "light_level": 1288
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 50.0,
+            "air_temperature": 22.0,
+            "soil_humidity": 40.0,
+            "soil_ph": 5.0,
+            "light_level": 1000
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 70.0,
+            "air_temperature": 28.0,
+            "soil_humidity": 6,
+            "soil_ph": 6.0,
+            "light_level": 2000
+        }
+    }
+]

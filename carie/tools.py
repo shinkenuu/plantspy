@@ -35,7 +35,7 @@ class ExaminePlant(RetrieverTool):
         if not plant:
             return Prediction(passages=[f"We dont have a plant named `{plant_name}`"])
 
-        exam = f"{plant_name} is a {plant.scientific_name} known for being {plant.personality}. It currently has {plant.status}."
+        exam = f"{plant_name} is a {plant.scientific_name}. It currently is {plant.status}."
         passages = [exam]
         prediction = Prediction(passages=passages)
 
@@ -55,7 +55,7 @@ class ReadPlantSensor(RetrieverTool):
         except ValueError:
             return Prediction(
                 passages=[
-                    "The action MUST follow the format read_plant_sensor[plant_name, sensor_name]"
+                    "The action MUST follow the format read_plant_sensor[one of our plants name, one of the available sensors]"
                 ]
             )
 
@@ -66,7 +66,7 @@ class ReadPlantSensor(RetrieverTool):
             "soil_ph",
             "light_level",
         ]:
-            return Prediction(passages=[f"We dont a sensor named `{sensor_name}`"])
+            return Prediction(passages=[f"We dont have a sensor named `{sensor_name}`"])
 
         plant = get_plant(plant_name)
 
@@ -94,7 +94,7 @@ class ListPlants(RetrieverTool):
     def forward(self, *args, **kwargs) -> Prediction:
         plants = list_plants()
 
-        passages = [f"{plant.name}, a ({plant.scientific_name})" for plant in plants]
+        passages = [f"{plant.name}, currently has {plant.status}" for plant in plants]
 
         prediction = Prediction(passages=passages)
         return prediction
@@ -103,7 +103,7 @@ class ListPlants(RetrieverTool):
 class WebSearch(RetrieverTool):
     name = "web_search"
     input_variable = "query"
-    desc = "takes a search query and returns one or more potentially relevant results from a search engine"
+    desc = "takes a search query and returns one or more potentially relevant results from a web search engine"
 
     def forward(self, query: str, max_results: int = 5, *args, **kwargs) -> Prediction:
         clean_query = query.split("]")[0]

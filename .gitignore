@@ -19,3 +19,6 @@ local_cache/
 
 # Prototypes
 radugui.py
+
+# Compiled
+compiled/

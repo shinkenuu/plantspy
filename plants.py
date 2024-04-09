@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import json
 
-_PLANTS = []
+_PLANTS = {}
 _PLANTS_JSON_FILE_PATH = "./storage/plants.json"
 
 
@@ -89,16 +89,8 @@ class Plant:
         return exam
 
 
-def list_plants() -> list[Plant]:
-    """Lists available plants.
-
-    Returns:
-        A list with available Plant instances.
-    """
-    global _PLANTS
-
-    if _PLANTS:
-        return _PLANTS
+def _read_plants_file() -> dict[Plant]:
+    plants = {}
 
     with open(_PLANTS_JSON_FILE_PATH) as file:
         plants_json = json.load(file)
@@ -109,16 +101,36 @@ def list_plants() -> list[Plant]:
         plant.actual_sensor = Sensor(**plant_json["actual_sensor"])
         plant.ideal_min_sensor = Sensor(**plant_json["ideal_min_sensor"])
         plant.ideal_max_sensor = Sensor(**plant_json["ideal_max_sensor"])
-        _PLANTS.append(plant)
+        plants[plant.name.lower()] = plant
 
+    return plants
+
+
+def _load_plants() -> dict[Plant]:
+    global _PLANTS
+
+    if _PLANTS:
+        return _PLANTS
+
+    _PLANTS = _read_plants_file()
     return _PLANTS
+
+
+def list_plants() -> list[Plant]:
+    """Lists available plants.
+
+    Returns:
+        A list with available Plant instances.
+    """
+    plants = _load_plants()
+    return list(plants.values())
 
 
 def get_plant(name: str) -> Plant | None:
     """Gets a Plant by its name.
 
     Args:
-        name: the name of the Plant to be detailed.
+        name: the name of the Plant to be returned.
 
     Returns:
         Plant matching `name` or None if there is no match.
@@ -128,7 +140,7 @@ def get_plant(name: str) -> Plant | None:
 
     lower_name = name.lower()
 
-    plants = list_plants()
-    plant = next((plant for plant in plants if plant.name.lower() == lower_name), None)
+    plants = _load_plants()
+    plant = plants.get(lower_name)
 
     return plant

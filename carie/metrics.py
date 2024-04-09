@@ -1,51 +1,62 @@
-from dspy.evaluate.auto_evaluation import AnswerCorrectness
-from dspy.predict import ChainOfThought
+from numpy import mean, median
 
-_tonality_scorer = ChainOfThought(
-    "expected tonality example, evaluating example -> tonality similarity score"
-)
-_answer_correctness = AnswerCorrectness()
+from carie.programs import is_semantically_similar
 
 
-def is_similar_assistance(example, prediction, *args, **kwargs):
+def evaluate_carie(gold, prediction, *args, **kwargs):
     if not prediction.result.strip():
         return 0
 
-    correctness_score = _parse_score(
-        _answer_correctness(
-            question=example.query,
-            gold_answer=example.answer,
-            predicted_answer=prediction.result,
-        )
-    )
-    tonality_score = _parse_score(_tonality_scorer(example.query, prediction.result))
+    assert gold.task == prediction.task
 
-    scores = (correctness_score, tonality_score)
-
-    similarity_score = sum(scores) // len(scores)
-    return similarity_score
-
-
-def _parse_score(score_text: str):
-    try:
-        score = float(score_text.strip().split()[0])
-    except Exception:
-        return 0
+    thought_score = _score_thoughts(gold=gold, prediction=prediction)
+    action_score = _score_actions(gold=gold, prediction=prediction)
+    result_score = _score_result(gold=gold, prediction=prediction)
+    scores = [thought_score, action_score, result_score]
+    score = median(scores)
 
     return score
 
 
-def is_correct(example, prediction, trace=None, frac=0.7):
-    if not prediction.result.strip():
-        return 0
-
-    answer_correctness = _answer_correctness(
-        question=example.query,
-        gold_answer=example.answer,
-        predicted_answer=prediction.result,
+def _score_thoughts(gold, prediction) -> float:
+    prediction_thought_hops = sum(
+        [1 for step_name in prediction if "thought" in step_name.lower()]
     )
-    is_correct = answer_correctness.is_correct.strip().lower().startswith("true")
-    # tonality = .96 # tone matches persona
-    # relevancy = .99 # relevancy to fulfill query
-    # return sum([factualness, correctness, tonality, relevancy]) > 3.6
-    return is_correct
+
+    semantic_similarity_scores = []
+
+    for hop in range(1, prediction_thought_hops + 1):
+        hop_step_name = f"Thought_{hop}"
+
+        try:
+            gold_thought = gold[hop_step_name]
+        except KeyError:
+            semantic_similarity_scores.append(0)
+            continue
+
+        predicted_thought = prediction[hop_step_name]
+        semantically_similar = is_semantically_similar(gold_thought, predicted_thought)
+        semantic_similarity_score = 1.0 if semantically_similar else 0.0
+        semantic_similarity_scores.append(semantic_similarity_score)
+
+    score = mean(semantic_similarity_scores)
+    return score
+
+
+def _score_actions(gold, prediction) -> float:
+    actions = [step_name for step_name in prediction if "action" in step_name.lower()]
+
+    has_duplicates = len(actions) > len(set(actions))
+    score = 0.0 if has_duplicates else 1.0
+
+    return score
+
+
+def _score_result(gold, prediction) -> float:
+    gold_result = gold.result
+    prediction_result = prediction.result
+
+    semantically_similar = is_semantically_similar(gold_result, prediction_result)
+    score = 1.0 if semantically_similar else 0.0
+
+    return score
