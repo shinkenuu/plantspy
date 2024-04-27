@@ -5,15 +5,17 @@ from dspy.evaluate import Evaluate
 from dspy.teleprompt import BootstrapFewShot
 
 from carie.data import load_examples
-from carie.lm import get_lm
+from carie.lm import get_llama3
 from carie.programs import Carie
 from carie.metrics import evaluate_carie
 
-dspy.settings.configure(lm=get_lm())
+
+lm = get_llama3()
+dspy.settings.configure(lm=lm)
 
 
 # Load data
-trainset, valset, testset = load_examples(test_size=0.5)
+trainset, valset, testset = load_examples(test_size=0.33)
 
 # Optimize
 bs_few_shot = BootstrapFewShot(
@@ -44,7 +46,5 @@ bs_few_shot_score = evaluator(bs_few_shot_carie)
 print("Few-shot score: ", bs_few_shot_score)
 
 # Save
-filename = (
-    f"compiled/carie_bs_few_shot_{bs_few_shot_score}_{datetime.now().isoformat()}.json"
-)
+filename = f"compiled/carie_bs_few_shot_{bs_few_shot_score}_llama3_{datetime.now().isoformat()}.json"
 bs_few_shot_carie.save(filename)

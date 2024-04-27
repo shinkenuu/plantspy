@@ -64,8 +64,8 @@ def load_examples(n_examples: int = None, test_size: float = 0.3):
             f"Not enough examples. Desired {n_examples}, actual {len(rows)}"
         )
 
-    trainset, testset = split(rows, test_size=test_size)
-    valset, testset = split(testset, test_size=0.5)
+    trainset, valset = split(rows, test_size=test_size)
+    testset = list(_read_csv(file_path="./storage/test.csv"))
 
     trainset = [Example(row).with_inputs("task") for row in trainset]
     valset = [Example(row).with_inputs("task") for row in valset]
